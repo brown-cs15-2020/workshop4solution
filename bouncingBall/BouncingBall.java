@@ -21,6 +21,12 @@ public class BouncingBall {
 
     public BouncingBall(Pane demoPane) {
         _demoPane = demoPane;
+        this.setUpBottomLine();
+        _ball = new Ball(demoPane);
+        this.setUpTimeline();
+    }
+
+    private void setUpBottomLine() {
         _bottomLine = new Rectangle();
         _bottomLine.setHeight(Constants.GROUND_HEIGHT);
         _bottomLine.setWidth(Constants.GROUND_WIDTH);
@@ -28,23 +34,18 @@ public class BouncingBall {
         _bottomLine.setY(Constants.GROUND_Y);
         _bottomLine.setFill(Color.BLUEVIOLET);
         _demoPane.getChildren().add(_bottomLine);
-        _ball = new Ball(demoPane);
-        this.setUpTimeline();
     }
 
     private void setUpTimeline() {
-        KeyFrame kf = new KeyFrame(Duration.seconds(Constants.DURATION), new DemoHandler());
+        KeyFrame kf = new KeyFrame(Duration.seconds(Constants.DURATION), new FallHandler());
         Timeline timeline = new Timeline(kf);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
-    private class DemoHandler implements EventHandler<ActionEvent> {
-        private double _velocity;
-        private double _currentVelocity;
-        private double _position;
-        public DemoHandler() {
-            _velocity = 10;
+    private class FallHandler implements EventHandler<ActionEvent> {
+
+        public FallHandler() {
         }
 
         @Override
@@ -56,15 +57,12 @@ public class BouncingBall {
             //TODO implement bounce simulation algorithm
             if(_ball.getBall().intersects(_bottomLine.getX(),_bottomLine.getY(),_bottomLine.getWidth()
                     ,_bottomLine.getHeight())){
-                _currentVelocity = Constants.REBOUND_VELOCITY;
-
-            }else{
-                _currentVelocity = _currentVelocity + Constants.DURATION * Constants.GRAVITY;
+                _ball.setVelocity(Constants.REBOUND_VELOCITY);
+            } else {
+                _ball.setVelocity(_ball.getVelocity() + Constants.DURATION * Constants.GRAVITY);
             }
-            _position = _ball.getYLocation() + _currentVelocity * Constants.DURATION;
-            _ball.setYLocation(_position);
+            double position = _ball.getYLocation() + _ball.getVelocity() * Constants.DURATION;
+            _ball.setYLocation(position);
         }
     }
-
-
 }

@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 public class Ball {
 
     private Circle _ball;
+    private double _velocity;
 
     public Ball(Pane pane) {
         _ball = new Circle();
@@ -18,6 +19,14 @@ public class Ball {
         _ball.setCenterX(Constants.SCENE_WIDTH / 2);
         _ball.setCenterY(Constants.BALL_START_Y);
         pane.getChildren().addAll(_ball);
+    }
+
+    public double getVelocity() {
+        return _velocity;
+    }
+
+    public void setVelocity(double newVel) {
+        _velocity = newVel;
     }
 
     public Circle getBall() {

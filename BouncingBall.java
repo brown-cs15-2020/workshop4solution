@@ -1,4 +1,4 @@
-package bouncingBall;
+package workshop4solution;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -15,54 +15,44 @@ import javafx.util.Duration;
  * Top-level logical class of our program, contains timeline of bouncing ball.
  */
 public class BouncingBall {
-    private Ball _ball;
-    private Pane _demoPane;
-    private Rectangle _bottomLine;
+    private Ball ball;
+    private Pane demoPane;
+    private Rectangle bottomLine;
 
     public BouncingBall(Pane demoPane) {
-        _demoPane = demoPane;
+        this.demoPane = demoPane;
         this.setUpBottomLine();
-        _ball = new Ball(demoPane);
+        this.ball = new Ball(demoPane);
         this.setUpTimeline();
     }
 
     private void setUpBottomLine() {
-        _bottomLine = new Rectangle();
-        _bottomLine.setHeight(Constants.GROUND_HEIGHT);
-        _bottomLine.setWidth(Constants.GROUND_WIDTH);
-        _bottomLine.setX(Constants.GROUND_X);
-        _bottomLine.setY(Constants.GROUND_Y);
-        _bottomLine.setFill(Color.BLUEVIOLET);
-        _demoPane.getChildren().add(_bottomLine);
+        this.bottomLine = new Rectangle();
+        this.bottomLine.setHeight(Constants.GROUND_HEIGHT);
+        this.bottomLine.setWidth(Constants.GROUND_WIDTH);
+        this.bottomLine.setX(Constants.GROUND_X);
+        this.bottomLine.setY(Constants.GROUND_Y);
+        this.bottomLine.setFill(Color.BLUEVIOLET);
+        this.demoPane.getChildren().add(this.bottomLine);
     }
 
     private void setUpTimeline() {
-        KeyFrame kf = new KeyFrame(Duration.seconds(Constants.DURATION), new FallHandler());
+        KeyFrame kf = new KeyFrame(Duration.seconds(Constants.DURATION), (ActionEvent e) -> this.updateBall());
         Timeline timeline = new Timeline(kf);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
-
-    private class FallHandler implements EventHandler<ActionEvent> {
-
-        public FallHandler() {
+    private void bounce(){
+        if (this.ball.getBall().intersects(this.bottomLine.getLayoutBounds())){
+            this.ball.setVelocity(Constants.REBOUND_VELOCITY);
         }
+    }
 
-        @Override
-        public void handle(ActionEvent event) {
-            this.updateBall();
-        }
+    private void updateBall() {
+        //TODO implement bounce simulation algorithm
+        this.ball.updateVelocity();
+        this.ball.updatePosition();
+        this.bounce();
 
-        private void updateBall() {
-            //TODO implement bounce simulation algorithm
-            if(_ball.getBall().intersects(_bottomLine.getX(),_bottomLine.getY(),_bottomLine.getWidth()
-                    ,_bottomLine.getHeight())){
-                _ball.setVelocity(Constants.REBOUND_VELOCITY);
-            } else {
-                _ball.setVelocity(_ball.getVelocity() + Constants.DURATION * Constants.GRAVITY);
-            }
-            double position = _ball.getYLocation() + _ball.getVelocity() * Constants.DURATION;
-            _ball.setYLocation(position);
-        }
     }
 }

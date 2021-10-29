@@ -1,4 +1,4 @@
-package bouncingBall;
+package workshop4solution;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -10,34 +10,36 @@ import javafx.scene.shape.Rectangle;
  */
 public class Ball {
 
-    private Circle _ball;
-    private double _velocity;
+    private Circle ball;
+    private double velocity;
 
     public Ball(Pane pane) {
-        _ball = new Circle();
-        _ball.setRadius(Constants.BALL_RADIUS);
-        _ball.setCenterX(Constants.SCENE_WIDTH / 2);
-        _ball.setCenterY(Constants.BALL_START_Y);
-        pane.getChildren().addAll(_ball);
+        this.ball = new Circle();
+        this.ball.setRadius(Constants.BALL_RADIUS);
+        this.ball.setCenterX(Constants.SCENE_WIDTH / 2);
+        this.ball.setCenterY(Constants.BALL_START_Y);
+        pane.getChildren().addAll(this.ball);
     }
-
-    public double getVelocity() {
-        return _velocity;
+    public void updateVelocity(){
+        this.velocity = this.velocity + (Constants.GRAVITY*Constants.DURATION);
+    }
+    public void updatePosition(){
+        this.setYLocation(this.getYLocation() + this.velocity * (Constants.DURATION));
     }
 
     public void setVelocity(double newVel) {
-        _velocity = newVel;
+        this.velocity = newVel;
     }
 
     public Circle getBall() {
-        return _ball;
+        return this.ball;
     }
 
     public void setYLocation(double y) {
-        _ball.setCenterY(y);
+        this.ball.setCenterY(y);
     }
 
     public double getYLocation() {
-        return _ball.getCenterY();
+        return this.ball.getCenterY();
     }
 }

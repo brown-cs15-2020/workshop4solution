@@ -1,4 +1,4 @@
-package bouncingBall;
+package workshop4solution;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
